@@ -1,0 +1,33 @@
+name: Generiraj Doxygen Dokumentaciju
+
+# Akcija se pokrece svaki put kada pushamo na glavni (main) branch
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch: # Omogućuje ručno pokretanje iz GitHub sučelja
+
+# Dozvole potrebne da GitHub Action sam moze napraviti commit u "gh-pages" granu
+permissions:
+  contents: write
+
+jobs:
+  build_docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repozitorija
+      uses: actions/checkout@v3
+
+    - name: Instalacija Doxygen alata na runneru
+      run: sudo apt-get update && sudo apt-get install -y doxygen
+
+    - name: Pokretanje gneriranja dokumentacije (Doxygen)
+      run: doxygen Doxyfile
+
+    - name: Deploy dokumentacije na GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/html
+        publish_branch: gh-pages
+        commit_message: "Automatsko generiranje Doxygen dokumentacije [skip ci]"
