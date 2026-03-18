@@ -14,7 +14,7 @@ U implementaciji su koristena:
 
 ---
 
-## ?? Control Flow Graph (Tijek programa)
+## Control Flow Graph (Tijek programa)
 
 Tijek glavnog programa (`loop`) i asinkroni prekidi (`ISR`) prikazani su koristeci Mermaid.js dijagram:
 
@@ -60,6 +60,6 @@ graph TD
 
 ---
 
-## ?? Automatizirana Dokumentacija
+## Automatizirana Dokumentacija
 Sva dokumentacija koda kreirana je koristeci **Doxygen** norme unutar izvornog koda te je automatizirana putem funkcije GitHub Actions.
 
