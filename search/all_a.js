@@ -6,5 +6,5 @@ var searchData=
   ['pin_5fecho_3',['PIN_ECHO',['../main_8cpp.html#a4479c6dae2e927cb64559f439ecb7d7c',1,'main.cpp']]],
   ['pin_5ftrig_4',['PIN_TRIG',['../main_8cpp.html#a7c03ad58de14aa0fdca74221d30427cf',1,'main.cpp']]],
   ['prekidi_20u_20ugradbenim_20sustavima_5',['Lab1: Prekidi u ugradbenim sustavima',['../index.html',1,'']]],
-  ['programa_6',['?? Control Flow Graph (Tijek programa)',['../index.html#autotoc_md4',1,'']]]
+  ['programa_6',['Control Flow Graph (Tijek programa)',['../index.html#autotoc_md4',1,'']]]
 ];
