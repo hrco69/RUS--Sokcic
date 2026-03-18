@@ -3,14 +3,14 @@
 ## Autor
 Hrvoje Sokcic (GitHub: [hrco69](https://github.com/hrco69/RUS--Sokcic))
 
-## Opis rješenja
-Ovaj zadatak rješava problematiku upravljanja višestrukim prekidima i njihovim prioritetima na mikrokontroleru **ESP32**, uz uporabu Wokwi simulatora i PlatformIO radnog okvira.
+## Opis rjesenja
+Ovaj zadatak rjesava problematiku upravljanja visestrukim prekidima i njihovim prioritetima na mikrokontroleru **ESP32**, uz uporabu Wokwi simulatora i PlatformIO radnog okvira.
 
-U implementaciji su korištena:
+U implementaciji su koristena:
 1. **Tri tipkala (High, Med, Low):** Vanjski prekidi (External Interrupts) okidani na padajuci brid signala (`FALLING`), povezani na pinove 25, 26 i 27 koristeci interne pull-up otpornike. Postavljena je zastavica u ISR rutini, dok se softverski prioriteti reguliraju u glavnoj petlji, tako da *High* gumb uvijek ima pravo prvog prolaska kroz obradu ako dode do sukoba.
 2. **Hardverski Timer:** Ugradeni ESP32 prescaler timer koji okida svake dvije sekunde (`2 000 000` mikrosekundi).
-3. **HC-SR04 Senzor udaljenosti:** Implementiran ne-blokirajuci nacin citanja koji se oslanja iskljucivo na `CHANGE` vrste ISR prekida (hvatanje oba brida).
-4. **Upravljanje resursima (Kriticne sekcije):** Buduci da timer i senzor dijele vrijeme procesora, citanje njihovih zapisanih *isr* varijabli unutar `loop()`-a zašticeno je FreeRTOS semaforskim funkcijama `portENTER_CRITICAL()` i `portEXIT_CRITICAL()`.
+3. **HC-SR04 Senzor udaljenosti:** Implementiran ne-blokirajuci nacin citanja koji se oslanja iskljucivo na `CHANGE` vrste ISR prekida (hvatanje oba brida). 
+4. **Upravljanje resursima (Kriticne sekcije):** Buduci da timer i senzor dijele vrijeme procesora, citanje njihovih zapisanih *isr* varijabli unutar `loop()`-a zasticeno je FreeRTOS semaforskim funkcijama `portENTER_CRITICAL()` i `portEXIT_CRITICAL()`.
 
 ---
 
@@ -40,26 +40,26 @@ graph TD
     J -- Ne --> L{Dosao Timer FLAG?}
     
     K --> L
-    L -- Da --> M[Citanje uz KRITICNU SEKCIJU] --> N{Dosao Senzor Odgovor?}
+    L -- Da --> M[Citanje uz KRITICNU SEKCIJU] --> N{Dosao Senzor Odgovor?}  
     L -- Ne --> N
     
     N -- Da --> O[Ispis udaljenosti i reset FLAG-a] --> C
     N -- Ne --> C
-
     
     %% --- Ovdje asinkrono pucaju prekidi ---
-    subgraph Hardverski Prekidi (ISR - Ugnjezdeno)
-        Z1(Pritisak High/Med/Low Gumba) --> Z1_ISR[ISR: Postavi volatile flag na True]
-        Z2(Hardverski Timer) --> Z2_ISR[ISR Timer: portENTER_CRITICAL -> Postavi Okinuto]
-        Z3(Puls s HC-SR04) --> Z3_ISR[ISR Senzor: Mjerenje vremena na pocetku i kraju ECHO signala]
+    subgraph hardverski_prekidi [Hardverski Prekidi i ISR]
+        Z1(Pritisak Gumba) --> Z1_ISR[ISR: Postavi volatile flag]
+        Z2(Hardverski Timer) --> Z2_ISR[ISR Timer: Postavi Okinuto]
+        Z3(Puls s HC-SR04) --> Z3_ISR[ISR Senzor: Mjerenje vremena]
     end
     
-    Z1 -. asinkrono mijenja stanje glavne petlje .-> F
+    Z1 -. asinkrono mijenja stanje .-> F
     Z2 -. asinkrono .-> L
-    Z3 -. izracunata daljina bez delay() .-> N
+    Z3 -. izracunata daljina bez delay .-> N
 ```
 
 ---
 
 ## ?? Automatizirana Dokumentacija
 Sva dokumentacija koda kreirana je koristeci **Doxygen** norme unutar izvornog koda te je automatizirana putem funkcije GitHub Actions.
+
