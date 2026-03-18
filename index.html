@@ -78,13 +78,13 @@ $(function() {
 Autor</h1>
 <p>Hrvoje Sokcic (GitHub: <a href="https://github.com/hrco69/RUS--Sokcic">hrco69</a>)</p>
 <h1><a class="anchor" id="autotoc_md2"></a>
-Opis rješenja</h1>
-<p>Ovaj zadatak rješava problematiku upravljanja višestrukim prekidima i njihovim prioritetima na mikrokontroleru <b>ESP32</b>, uz uporabu Wokwi simulatora i PlatformIO radnog okvira.</p>
-<p>U implementaciji su korištena:</p><ol type="1">
+Opis rjesenja</h1>
+<p>Ovaj zadatak rjesava problematiku upravljanja visestrukim prekidima i njihovim prioritetima na mikrokontroleru <b>ESP32</b>, uz uporabu Wokwi simulatora i PlatformIO radnog okvira.</p>
+<p>U implementaciji su koristena:</p><ol type="1">
 <li><b>Tri tipkala (High, Med, Low):</b> Vanjski prekidi (External Interrupts) okidani na padajuci brid signala (<code>FALLING</code>), povezani na pinove 25, 26 i 27 koristeci interne pull-up otpornike. Postavljena je zastavica u ISR rutini, dok se softverski prioriteti reguliraju u glavnoj petlji, tako da <em>High</em> gumb uvijek ima pravo prvog prolaska kroz obradu ako dode do sukoba.</li>
 <li><b>Hardverski Timer:</b> Ugradeni ESP32 prescaler timer koji okida svake dvije sekunde (<code>2 000 000</code> mikrosekundi).</li>
 <li><b>HC-SR04 Senzor udaljenosti:</b> Implementiran ne-blokirajuci nacin citanja koji se oslanja iskljucivo na <code>CHANGE</code> vrste ISR prekida (hvatanje oba brida).</li>
-<li><b>Upravljanje resursima (Kriticne sekcije):</b> Buduci da timer i senzor dijele vrijeme procesora, citanje njihovih zapisanih <em>isr</em> varijabli unutar <code><a class="el" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">loop()</a></code>-a zašticeno je FreeRTOS semaforskim funkcijama <code>portENTER_CRITICAL()</code> i <code>portEXIT_CRITICAL()</code>.</li>
+<li><b>Upravljanje resursima (Kriticne sekcije):</b> Buduci da timer i senzor dijele vrijeme procesora, citanje njihovih zapisanih <em>isr</em> varijabli unutar <code><a class="el" href="main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">loop()</a></code>-a zasticeno je FreeRTOS semaforskim funkcijama <code>portENTER_CRITICAL()</code> i <code>portEXIT_CRITICAL()</code>.</li>
 </ol>
 <hr  />
 <h1><a class="anchor" id="autotoc_md4"></a>
@@ -111,23 +111,22 @@ Opis rješenja</h1>
 <div class="line">    J -- Ne --&gt; L{Dosao Timer FLAG?}</div>
 <div class="line">    </div>
 <div class="line">    K --&gt; L</div>
-<div class="line">    L -- Da --&gt; M[Citanje uz KRITICNU SEKCIJU] --&gt; N{Dosao Senzor Odgovor?}</div>
+<div class="line">    L -- Da --&gt; M[Citanje uz KRITICNU SEKCIJU] --&gt; N{Dosao Senzor Odgovor?}  </div>
 <div class="line">    L -- Ne --&gt; N</div>
 <div class="line">    </div>
 <div class="line">    N -- Da --&gt; O[Ispis udaljenosti i reset FLAG-a] --&gt; C</div>
 <div class="line">    N -- Ne --&gt; C</div>
-<div class="line"> </div>
 <div class="line">    </div>
 <div class="line">    %% --- Ovdje asinkrono pucaju prekidi ---</div>
-<div class="line">    subgraph Hardverski Prekidi (ISR - Ugnjezdeno)</div>
-<div class="line">        Z1(Pritisak High/Med/Low Gumba) --&gt; Z1_ISR[ISR: Postavi volatile flag na True]</div>
-<div class="line">        Z2(Hardverski Timer) --&gt; Z2_ISR[ISR Timer: portENTER_CRITICAL -&gt; Postavi Okinuto]</div>
-<div class="line">        Z3(Puls s HC-SR04) --&gt; Z3_ISR[ISR Senzor: Mjerenje vremena na pocetku i kraju ECHO signala]</div>
+<div class="line">    subgraph hardverski_prekidi [Hardverski Prekidi i ISR]</div>
+<div class="line">        Z1(Pritisak Gumba) --&gt; Z1_ISR[ISR: Postavi volatile flag]</div>
+<div class="line">        Z2(Hardverski Timer) --&gt; Z2_ISR[ISR Timer: Postavi Okinuto]</div>
+<div class="line">        Z3(Puls s HC-SR04) --&gt; Z3_ISR[ISR Senzor: Mjerenje vremena]</div>
 <div class="line">    end</div>
 <div class="line">    </div>
-<div class="line">    Z1 -. asinkrono mijenja stanje glavne petlje .-&gt; F</div>
+<div class="line">    Z1 -. asinkrono mijenja stanje .-&gt; F</div>
 <div class="line">    Z2 -. asinkrono .-&gt; L</div>
-<div class="line">    Z3 -. izracunata daljina bez delay() .-&gt; N</div>
+<div class="line">    Z3 -. izracunata daljina bez delay .-&gt; N</div>
 </div><!-- fragment --><hr  />
 <h1><a class="anchor" id="autotoc_md6"></a>
 ?? Automatizirana Dokumentacija</h1>
