@@ -1,4 +1,3 @@
 [wokwi]
 version = 1
-firmware = 'main.ino'
-elf = ''
+elf = "../.pio/build/esp32dev/firmware.elf"
