@@ -3,15 +3,21 @@
   "author": "Hrco",
   "editor": "wokwi",
   "parts": [
-    { "type": "board-esp32-devkit-c-v4", "id": "esp32", "top": 0, "left": 0, "attrs": {} },
-    { "type": "wokwi-dht22", "id": "dht1", "top": -30, "left": 120, "attrs": {} }
+    { "type": "board-esp32-devkit-c-v4", "id": "esp32", "top": 50, "left": 50, "attrs": {} },
+    { "type": "wokwi-dht22", "id": "dht1", "top": -20, "left": -100, "attrs": {} },
+    { "type": "wokwi-led", "id": "ledAct", "top": 0, "left": 230, "attrs": { "color": "red", "label": "MJERENJE" } },
+    { "type": "wokwi-led", "id": "ledAwake", "top": 80, "left": 230, "attrs": { "color": "yellow", "label": "BUDAN" } }
   ],
   "connections": [
     [ "esp32:TX", "$serialMonitor:RX", "", [] ],
     [ "esp32:RX", "$serialMonitor:TX", "", [] ],
     [ "esp32:15", "dht1:SDA", "green", [ "v0" ] ],
     [ "esp32:3V3", "dht1:VCC", "red", [ "v0" ] ],
-    [ "esp32:GND.1", "dht1:GND", "black", [ "v0" ] ]
+    [ "esp32:GND.1", "dht1:GND", "black", [ "v0" ] ],
+    [ "esp32:26", "ledAct:A", "red", [ "h30", "v-80" ] ],
+    [ "ledAct:C", "esp32:GND.2", "black", [ "v0" ] ],
+    [ "esp32:14", "ledAwake:A", "gold", [ "h30" ] ],
+    [ "ledAwake:C", "esp32:GND.3", "black", [ "v0" ] ]
   ],
   "dependencies": {}
 }
