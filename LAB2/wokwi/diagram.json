@@ -15,9 +15,9 @@
     [ "esp32:3V3", "dht1:VCC", "red", [ "v0" ] ],
     [ "esp32:GND.1", "dht1:GND", "black", [ "v0" ] ],
     [ "esp32:26", "ledAct:A", "red", [ "h30", "v-80" ] ],
-    [ "ledAct:C", "esp32:GND.2", "black", [ "v0" ] ],
+    [ "ledAct:C", "esp32:GND.1", "black", [ "v0" ] ],
     [ "esp32:14", "ledAwake:A", "gold", [ "h30" ] ],
-    [ "ledAwake:C", "esp32:GND.3", "black", [ "v0" ] ]
+    [ "ledAwake:C", "esp32:GND.1", "black", [ "v0" ] ]
   ],
   "dependencies": {}
 }
