@@ -72,11 +72,12 @@ void enterSleep() {
 
 void setup() {
     Serial.begin(115200);
+    delay(1000); // Kratka stabilizacija senzora i serijske veze
+    
+    Serial.println("\n=== Ocitavanje zapoceto ===");
     
     // Inicijalizacija senzora
     dht.begin();
-    
-    delay(1000); // Kratka stabilizacija senzora i serijske veze
     
     printWakeupReason();
     activePhase();
