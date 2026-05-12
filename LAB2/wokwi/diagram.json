@@ -9,6 +9,8 @@
     { "type": "wokwi-led", "id": "ledAwake", "top": 80, "left": 230, "attrs": { "color": "yellow", "label": "BUDAN" } }
   ],
   "connections": [
+    [ "esp32:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp32:RX", "$serialMonitor:TX", "", [] ],
     [ "esp32:15", "dht1:SDA", "green", [ "v0" ] ],
     [ "esp32:3V3", "dht1:VCC", "red", [ "v0" ] ],
     [ "esp32:GND.1", "dht1:GND", "black", [ "v0" ] ],
