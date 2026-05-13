@@ -40,20 +40,37 @@ static bool readDht(float& outT, float& outH) {
 
 static void dumpAndReset() {
     Serial.println();
-    Serial.println("================== SPREMNIK PUN -> ISPIS 10 ZAPISA ==================");
-    Serial.println(" zapis | vrijeme (ms) | temperatura (C) | vlaga (%) ");
-    Serial.println("-------+--------------+-----------------+-------------");
+    Serial.println("============================== SPREMNIK PUN -> ANALIZA ZAPISA ==============================");
+    
+    // Traženje min i max indeksa
+    uint8_t minT = 0, maxT = 0, minH = 0, maxH = 0;
+    for (uint8_t i = 1; i < BUFFER_CAPACITY; i++) {
+        if (buffer[i].temperatureC < buffer[minT].temperatureC) minT = i;
+        if (buffer[i].temperatureC > buffer[maxT].temperatureC) maxT = i;
+        if (buffer[i].humidityPct < buffer[minH].humidityPct) minH = i;
+        if (buffer[i].humidityPct > buffer[maxH].humidityPct) maxH = i;
+    }
+
+    Serial.println(" zapis | vrijeme (ms) | temperatura (C) | vlaga (%) | Oznake ekstrema       ");
+    Serial.println("-------+--------------+-----------------+-----------+-----------------------");
     for (uint8_t i = 0; i < BUFFER_CAPACITY; i++) {
-        Serial.printf(" %5u | %12u | %15.1f | %11.1f\r\n",
+        String flags = "";
+        if (i == maxT) flags += "[MAX TEMP] ";
+        if (i == minT) flags += "[MIN TEMP] ";
+        if (i == maxH) flags += "[MAX VLAGA] ";
+        if (i == minH) flags += "[MIN VLAGA] ";
+        
+        Serial.printf(" %5u | %12u | %15.1f | %9.1f | %s\r\n",
                       (unsigned)(i+1),
                       (unsigned)buffer[i].timestampMs,
                       buffer[i].temperatureC,
-                      buffer[i].humidityPct);
+                      buffer[i].humidityPct,
+                      flags.c_str());
     }
     dumpsCompleted++;
     Serial.printf(" Ukupno mjerenja otkad je upaljen: %u   |   Praznjenja: %u\r\n",
                   (unsigned)totalReadings, (unsigned)dumpsCompleted);
-    Serial.println("=====================================================================");
+    Serial.println("============================================================================================");
     Serial.println();
     bufferCount = 0;
 }
@@ -127,3 +144,4 @@ void loop() {
     esp_sleep_enable_timer_wakeup((uint64_t)REAL_DEEP_SLEEP_MS * 1000ULL);
     esp_deep_sleep_start();  
 }
+
